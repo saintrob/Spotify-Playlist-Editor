@@ -1,0 +1,3 @@
+uvicorn
+spotipy
+python-dotenv

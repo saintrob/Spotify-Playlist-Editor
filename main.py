@@ -1,14 +1,28 @@
 import os
 import spotipy
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from spotipy.oauth2 import SpotifyOAuth
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from fastapi import FastAPI
-
 
 load_dotenv()
 app = FastAPI()
-scope = "playlist-read-private user-library-read playlist-modify-public playlist-modify-private playlist-read-collaborative user-library-modify"
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
+    
+app.mount("/static", StaticFiles(directory="static", html=True), name="static")
+templates = Jinja2Templates(directory="templates")
+
+scope = "playlist-read-private" "user-library-read" "playlist-modify-public" "playlist-modify-private" "playlist-read-collaborative" "user-library-modify"
 
 
 # OAuth Authentication
@@ -20,6 +34,11 @@ sp_oauth = SpotifyOAuth(
 )
 sp = spotipy.Spotify(auth_manager=sp_oauth)
 
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse(
+        "index.html", {"request":request, "title": "welcome", "message": "fastapi backend"}
+        )
 
 
 @app.get("/login")
@@ -27,6 +46,10 @@ async def login():
     auth_url = sp_oauth.get_authorize_url()
     return RedirectResponse(url=auth_url)
 
+#testing ping endpoint
+@app.get("/ping")
+async def ping():
+    return {"message": "Pong!"}
 
 def list_all_playlist():
     playlists = sp.current_user_playlists()
@@ -173,12 +196,14 @@ def transfer_songs(selected_song_id, source_id, target):
 
 
 
-source_id = select_source_playlist()
-target = select_target_playlist(source_id)
-all_tracks = source_playlist_tracks(source_id)
-target_tracks = target_playlist_tracks(target)
-selected_song_id = select_songs(all_tracks)
-transfer_songs(selected_song_id, source_id, target)
+
+# CLI Execution for testing purposes:
+
+# source = select_source_playlist()
+# tracks = source_playlist_tracks(source)
+# selected = select_songs(tracks)
+# target = select_target_playlist(source['id'])
+# transfer_songs(selected, source['id'], target)
 
 
 

@@ -46,6 +46,11 @@ async def login():
     auth_url = sp_oauth.get_authorize_url()
     return RedirectResponse(url=auth_url)
 
+@app.get("/callback")
+async def callback(code: str):
+    sp_oauth.get_access_token(code)
+    return RedirectResponse("/") 
+
 #testing ping endpoint
 @app.get("/ping")
 async def ping():

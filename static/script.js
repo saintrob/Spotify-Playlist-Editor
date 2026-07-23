@@ -1,9 +1,15 @@
-async function fetchData() {
-    try  {
-        const response = await fetch('http://127.0.0.1:5500/ping')
-        const data = await response.json();
+async function GetPlaylist() {
+    try {
+        const response = await fetch('http://127.0.0.0:8000/getallplaylists');
+        if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = response.json();
+        console.log(data);
     }
-    catch(error) {
-        console.error("Error fetching data poopie: ", error)
+    catch (error) {
+        console.error("Failed to fetch data:", error);
     }
 }
+
+GetPlaylist();

@@ -4,9 +4,11 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse
 from spotipy.oauth2 import SpotifyOAuth
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from pydantic import BaseModel
 
 load_dotenv()
 app = FastAPI()
@@ -22,7 +24,7 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 templates = Jinja2Templates(directory="templates")
 
-scope = "playlist-read-private" "user-library-read" "playlist-modify-public" "playlist-modify-private" "playlist-read-collaborative" "user-library-modify"
+scope = "playlist-read-private user-library-read playlist-modify-public playlist-modify-private playlist-read-collaborative user-library-modify"
 
 
 # OAuth Authentication
@@ -33,6 +35,7 @@ sp_oauth = SpotifyOAuth(
     scope=scope
 )
 sp = spotipy.Spotify(auth_manager=sp_oauth)
+
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -51,12 +54,8 @@ async def callback(code: str):
     sp_oauth.get_access_token(code)
     return RedirectResponse("/") 
 
-#testing ping endpoint
-@app.get("/ping")
-async def ping():
-    return {"message": "Pong!"}
-
-def list_all_playlist():
+@app.get("/api/getallplaylists")
+async def list_all_playlist():
     playlists = sp.current_user_playlists()
     all_playlist = []
     playlist_count = 0
@@ -64,11 +63,11 @@ def list_all_playlist():
         for playlist in playlists['items']:
             all_playlist.append(playlist)
             playlist_count += 1
-            print(playlist_count, f"{playlist['name'], playlist['id']}")
         if playlists['next']:
             playlists = sp.next(playlists)
         else:
             playlists = None
+            print("GET playlist success.")
             return all_playlist
 
 
@@ -103,8 +102,23 @@ def select_target_playlist(source_id):
         print("Invalid Choice, Please Try Again")
 
 
+
+
+class SourcePlaylistData(BaseModel):
+    source_playlist_id: str
+    
+@app.post("/api/getsourceid")
+async def getSourceId_javascript(data: SourcePlaylistData):
+    print(f"ID is {data.source_playlist_id}")
+    source_id = data.source_playlist_id
+    status = {"status": "success", "message": f"All good from FastAPI end -- The Id is {data.source_playlist_id}"}
+    return status, source_id
+    
+    
+@app.get("/api/source_alltracks")
 # Get all of the tracks/items of the source playlist selected by the user
-def source_playlist_tracks(source_id):
+async def source_playlist_tracks(data: SourcePlaylistData):
+    source_id = data.source_playlist_id
     song_count = 0
     all_tracks = []
     tracks = sp.playlist_items(source_id)
@@ -119,6 +133,7 @@ def source_playlist_tracks(source_id):
         if tracks['next']:
             tracks = sp.next(tracks)
         else:
+            tracks = None
             return all_tracks
 
 

@@ -40,17 +40,22 @@ async function sourcePlaylist() {
 
                 for (let i = 0; i < result.length; i++) {
 
+                    if (result[i]["item"] == null){
+                    continue;
+                }
                     
                     const input = document.createElement("input");
                     input.type = "checkbox";
                     input.name = "source_tracks";
                     input.id = `checkbox-${i}`;
-                    input.value = result[i]["item"]["id"];
+                    input.value = result[i]["item"]['name'];
+                    
 
 
                     const label = document.createElement("label");
                     label.htmlFor = `checkbox-${i}`;  
                     label.textContent = result[i]["item"]["name"] + " - " + result[i]["item"]["artists"][0]["name"] ;
+                    
 
                     const wrapper = document.createElement("div");
                     wrapper.append(input);

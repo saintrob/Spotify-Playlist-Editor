@@ -116,12 +116,12 @@ async def getSourceId_javascript(data: SourcePlaylistData):
     all_tracks = []
     while tracks:
         if tracks['items'] == []:
-            print("Playlist is empty. Choose another source playlist.")
+            
             return []
         for track in tracks['items']:
             all_tracks.append(track)
             song_count += 1
-            print(song_count, f"{track['item']['name']} - {track['item']['artists'][0]['name']}")
+            
         if tracks['next']:
             tracks = sp.next(tracks)
         else:
@@ -140,12 +140,10 @@ async def source_playlist_tracks(data: SourcePlaylistData):
     tracks = sp.playlist_items(source_id)
     while tracks:
         if tracks['items'] == []:
-            print("Playlist is empty. Choose another source playlist.")
             return []
         for track in tracks['items']:
             all_tracks.append(track)
             song_count += 1
-            print(song_count, f"{track['item']['name']} - {track['item']['artists'][0]['name']}")
         if tracks['next']:
             tracks = sp.next(tracks)
         else:

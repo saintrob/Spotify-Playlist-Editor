@@ -28,7 +28,7 @@ async function sourcePlaylist() {
             source_id = sourcePlaylist["value"]
             const payload = 
             {source_playlist_id: source_id};
-
+            container.replaceChildren()
             try{
                 const response = await fetch("http://127.0.0.1:8000/api/getsourceid", {method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" // Alert FastAPI that JSON is coming
                 },
@@ -36,8 +36,10 @@ async function sourcePlaylist() {
                 });
                 const result = await response.json();
                 console.log(result);
+                
 
                 for (let i = 0; i < result.length; i++) {
+
                     
                     const input = document.createElement("input");
                     input.type = "checkbox";
@@ -51,12 +53,13 @@ async function sourcePlaylist() {
                     label.textContent = result[i]["item"]["name"] + " - " + result[i]["item"]["artists"][0]["name"] ;
 
                     const wrapper = document.createElement("div");
-                    wrapper.appendChild(input);
-                    wrapper.appendChild(label);
+                    wrapper.append(input);
+                    wrapper.append(label);
 
-                    container.appendChild(wrapper);
+                    container.append(wrapper);
                     console.log(result[i]["item"]["name"])
                     }
+                    
                 
             }
             catch (error) {

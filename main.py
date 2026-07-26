@@ -111,8 +111,24 @@ class SourcePlaylistData(BaseModel):
 async def getSourceId_javascript(data: SourcePlaylistData):
     print(f"ID is {data.source_playlist_id}")
     source_id = data.source_playlist_id
-    status = {"status": "success", "message": f"All good from FastAPI end -- The Id is {data.source_playlist_id}"}
-    return status, source_id
+    tracks = sp.playlist_items(source_id)
+    song_count = 0
+    all_tracks = []
+    while tracks:
+        if tracks['items'] == []:
+            print("Playlist is empty. Choose another source playlist.")
+            return []
+        for track in tracks['items']:
+            all_tracks.append(track)
+            song_count += 1
+            print(song_count, f"{track['item']['name']} - {track['item']['artists'][0]['name']}")
+        if tracks['next']:
+            tracks = sp.next(tracks)
+        else:
+            tracks = None
+            return all_tracks
+    
+    
     
     
 @app.get("/api/source_alltracks")

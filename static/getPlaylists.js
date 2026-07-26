@@ -12,7 +12,7 @@ async function GetPlaylist() {
         
         for (let i = 0; i < PlaylistData.length; i++) {
             const opt = document.createElement("option");
-            opt.value = PlaylistData[i]["id"].toLowerCase();
+            opt.value = PlaylistData[i]["id"]
             opt.textContent = PlaylistData[i]["name"] 
             select.appendChild(opt);
              }

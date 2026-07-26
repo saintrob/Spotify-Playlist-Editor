@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,31 @@
     <!-- The CSS link goes right here -->
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
     <h1>Spotify Project</h1>
     <a href="/login">Login to Spotify! Yay</a>
 </body>
+
+<div>
+    <br></br>
+    <select id="allPlaylists">
+        <option value="example"> choose a playlist </option>
+    </select>
+    <script src="static/getPlaylists.js"></script>
+</div>
+
+<div id = "selectSource_button">
+    <button id="selectSourcePlaylist">Select</button>
+    <script src="static/getSourcePlaylist.js" defer></script>
+</div>
+
+<div>
+    <p>All Songs</p>
+    <form id="checkbox-select-song-source">
+    
+    </form>
+
+</div>
+
 </html> 

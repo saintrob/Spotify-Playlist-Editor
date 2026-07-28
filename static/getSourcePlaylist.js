@@ -47,20 +47,19 @@ async function sourcePlaylist() {
                     const input = document.createElement("input");
                     input.type = "checkbox";
                     input.name = "source_tracks";
-                    input.id = `checkbox-${i}`;
+                    input.id = result[i]["item"]['id'];
                     input.value = result[i]["item"]['name'];
                     
 
 
                     const label = document.createElement("label");
-                    label.htmlFor = `checkbox-${i}`;  
+                    label.htmlFor = result[i]["item"]['id'];  
                     label.textContent = result[i]["item"]["name"] + " - " + result[i]["item"]["artists"][0]["name"] ;
                     
 
                     const wrapper = document.createElement("div");
                     wrapper.append(input);
                     wrapper.append(label);
-
                     container.append(wrapper);
                     console.log(result[i]["item"]["name"])
                     }
@@ -79,26 +78,6 @@ async function sourcePlaylist() {
     catch (error) {
         console.error("Failed to fetch data:", error);
 }
-}
-
-async function sourcePlaylist_tracks() {
-    try {
-        const container = document.getElementById('checkbox-select-song-source');
-        const response = await fetch('http://127.0.0.1:8000/api/getsourceid/alltracks');
-        if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const source_track_data = await response.json();
-        
-        for (let i = 0; i < source_track_data.length; i++) {
-            const input = document.createElement("input");
-            input.type = "checkbox"
-            container.appendChild(input);
-             }
-    }
-    catch (error) {
-        console.error("Failed to fetch data:", error);
-    }
 }
 
 

@@ -1,7 +1,5 @@
-async function selectSourceTracks() {
-    try{
-        const button = document.querySelector("#selectSourceTracks_button")
-        const confirmButton = document.getElementById('selectSourceTracks_button');
+async function selectSourceTracks(){
+const confirmButton = document.getElementById('selectSourceTracks_button');
 
 confirmButton.addEventListener('click', () => {
   // 1. Select all checkboxes with name="fruit" that are currently checked (:checked)
@@ -12,12 +10,5 @@ confirmButton.addEventListener('click', () => {
   
   // 3. Use the data
   console.log("Selected Checkboxes:", selectedValues); 
-        
-    }
-)}
-    catch (error) {
-        console.error("Failed to fetch data:", error);
-    }
+})
 }
-
-selectSourceTracks();  

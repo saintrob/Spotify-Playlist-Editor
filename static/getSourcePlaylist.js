@@ -48,7 +48,7 @@ async function sourcePlaylist() {
                     input.type = "checkbox";
                     input.name = "source_tracks";
                     input.id = result[i]["item"]['id'];
-                    input.value = result[i]["item"]['name'];
+                    input.value = result[i]["item"]['id'];
                     
 
 

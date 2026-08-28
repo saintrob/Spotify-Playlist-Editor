@@ -106,6 +106,10 @@ def select_target_playlist(source_id):
 
 class SourcePlaylistData(BaseModel):
     source_playlist_id: str
+
+class TargetPlaylistData(BaseModel):
+    target_playlist_id: str
+    selected_song_ids: list[str]
     
 @app.post("/api/getsourceid")
 async def getSourceId_javascript(data: SourcePlaylistData):
@@ -149,6 +153,12 @@ async def source_playlist_tracks(data: SourcePlaylistData):
         else:
             tracks = None
             return all_tracks
+        
+@app.post("/api/transfersongs")
+async def transfer_songs(data: TargetPlaylistData):
+    track_ids = data.selected_song_ids
+    sp.playlist_add_items(data.target_playlist_id, track_ids)
+    return {"added": len(track_ids), "target_id": data.target_playlist_id}
 
 
 def target_playlist_tracks(target):

@@ -25,4 +25,9 @@ HOW TO NAVIGATE:
 
 All the songs you selected should be in the target playlist now!
 
+## DISCLAIMER
+As of Spotify's February 2026 API policy change, this app only works on playlists
+you own. Anything that isn't yours — saved playlists from other users,
+Spotify-generated ones — can't be read or modified.
+
 

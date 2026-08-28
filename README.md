@@ -9,12 +9,19 @@ STILL BUILDING
 UPDATE:
 
 ALPHPA PROTOTYPE is finished.
+
 HOW TO NAVIGATE:
+
 #1. Login to Spotify
+
 #2. Select a source playlist   
+
 #3. Select the tracks to transfer
+
 #4. Select a target playlist
+
 #5. Click confirm
+
 
 All the songs you selected should be in the target playlist now!
 

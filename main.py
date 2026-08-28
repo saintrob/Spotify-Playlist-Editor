@@ -24,7 +24,7 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 templates = Jinja2Templates(directory="templates")
 
-scope = "playlist-read-private user-library-read playlist-modify-public playlist-modify-private playlist-read-collaborative user-library-modify"
+scope = "playlist-read-private user-library-read playlist-modify-public playlist-modify-private playlist-read-collaborative user-library-modify playlist-read-collaborative"
 
 
 # OAuth Authentication
@@ -240,7 +240,7 @@ def transfer_songs(selected_song_id, source_id, target):
 
 
 
-
+print(sp.playlist_items("3sQHsJjwEFCwCkrL8ASL62", additional_types=('track',)))
 # CLI Execution for testing purposes:
 
 # source = select_source_playlist()

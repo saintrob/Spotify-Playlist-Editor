@@ -4,6 +4,18 @@ This project serves mainly for one purpose and its to edit between Spotify playl
 Spotify does not have a way to natively transfer or add songs collectively from one playlist to another but a rather ineffecient way of doing it one by one, which makes the task monotonous and tedious (especially when there are many songs).
     
 STILL BUILDING 
-[ ▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ ] 20%
+[ ▰▰▰▰▰▰▰▰▱▱▱ ] 60%
 
--was on a vacation, building continues-
+UPDATE:
+
+ALPHPA PROTOTYPE is finished.
+HOW TO NAVIGATE:
+#1. Login to Spotify
+#2. Select a source playlist   
+#3. Select the tracks to transfer
+#4. Select a target playlist
+#5. Click confirm
+
+All the songs you selected should be in the target playlist now!
+
+

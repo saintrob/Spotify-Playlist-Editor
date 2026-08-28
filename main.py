@@ -240,7 +240,7 @@ def transfer_songs(selected_song_id, source_id, target):
 
 
 
-print(sp.playlist_items("3sQHsJjwEFCwCkrL8ASL62", additional_types=('track',)))
+
 # CLI Execution for testing purposes:
 
 # source = select_source_playlist()

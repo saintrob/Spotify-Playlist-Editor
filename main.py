@@ -37,12 +37,19 @@ sp_oauth = SpotifyOAuth(
 sp = spotipy.Spotify(auth_manager=sp_oauth)
 
 
+class SourcePlaylistData(BaseModel):
+    source_playlist_id: str
+
+class TargetPlaylistData(BaseModel):
+    target_playlist_id: str
+    selected_song_ids: list[str]
+
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse(
         "index.html", {"request":request, "title": "welcome", "message": "fastapi backend"}
         )
-
 
 @app.get("/login")
 async def login():
@@ -71,45 +78,6 @@ async def list_all_playlist():
             return all_playlist
 
 
-
-# Asks the user to choose the source playlist.
-def select_source_playlist():
-    all_playlist = list_all_playlist()
-    while True:
-        try:
-            pick = int(input("Choose Source Playlist: "))
-            if 1 <= pick <= len(all_playlist):
-                source_id = all_playlist[pick-1]['id']
-                return source_id
-        except ValueError:
-            pass
-        print("Invalid Choice, Please Try Again")
-
-
-def select_target_playlist(source_id):
-    all_playlist = list_all_playlist()
-    while True:
-        try:
-            pick = int(input("Choose Target Playlist: "))
-            if 1 <= pick <= len(all_playlist):
-                target_select = all_playlist[pick-1]
-                if target_select['id'] == source_id:
-                    print("Cannot choose the same playlist. Try again.")
-                else:
-                    return target_select
-        except ValueError:
-            pass
-        print("Invalid Choice, Please Try Again")
-
-
-
-
-class SourcePlaylistData(BaseModel):
-    source_playlist_id: str
-
-class TargetPlaylistData(BaseModel):
-    target_playlist_id: str
-    selected_song_ids: list[str]
     
 @app.post("/api/getsourceid")
 async def getSourceId_javascript(data: SourcePlaylistData):
@@ -131,8 +99,6 @@ async def getSourceId_javascript(data: SourcePlaylistData):
         else:
             tracks = None
             return all_tracks
-    
-    
     
     
 @app.get("/api/source_alltracks")
@@ -159,100 +125,6 @@ async def transfer_songs(data: TargetPlaylistData):
     track_ids = data.selected_song_ids
     sp.playlist_add_items(data.target_playlist_id, track_ids)
     return {"added": len(track_ids), "target_id": data.target_playlist_id}
-
-
-def target_playlist_tracks(target):
-    target_playlist_id = target['id']
-    all_tracks = []
-    tracks = sp.playlist_items(target_playlist_id)
-    while tracks:
-        for track in tracks['items']:
-            all_tracks.append(track)
-        if tracks['next']:
-            tracks = sp.next(tracks)
-        else:
-            return all_tracks
-
-
-def select_songs(all_tracks):
-    song_select = []
-    selected_song_id = []
-
-    while True:
-        try:
-            pick = (input("Choose Songs from the Source Playlist // (done,exit,undo) ")).lower()
-            if pick == "done":
-                if song_select == []:
-                    print("No songs selected. Please select at least one song.")
-                else:
-                    return selected_song_id
-            elif pick == "undo":
-                if song_select == []:
-                    print("cannot undo empty list. Please select another song or type 'done' to finish.")
-                else:
-                    song_select.pop()
-                    selected_song_id.pop()
-                    print("Last song removed from selection.")
-
-            elif pick == 'exit':
-                exit()
-
-            pick = int(pick)
-            if 1 <= pick <= len(all_tracks):
-                if all_tracks[pick-1]['item']['id'] not in selected_song_id:
-                    song_select.append(all_tracks[pick-1])
-                    selected_song_id.append(all_tracks[pick-1]['item']['id'])
-                    for song in song_select:
-                        print(song['item']['name'])
-                else:
-                    print("Song is already selected. Choose another song or type 'Done'.")
-
-        except ValueError:
-            print("Invalid Choice, Please Try Again")
-
-
-def transfer_songs(selected_song_id, source_id, target):
-    target_id_check = target_playlist_tracks(target)
-    target_ids = []
-
-    for track in target_id_check:
-        target_ids.append(track['item']['id'])
-
-    duplicates_found = any(id in target_ids for id in selected_song_id)
-
-    if duplicates_found:
-        while True:
-            user_input = input("This playlist contains duplicates of the song(s) you are copying. Would you still like to continue? (Y/N) ").lower()
-            if user_input == "y":
-                sp.playlist_add_items(target['id'], selected_song_id)
-                print(f"{len(selected_song_id)} song(s) successfully copied.")
-                return
-            elif user_input == "n":
-                source_playlist_tracks(source_id)
-                select_songs(all_tracks)
-                
-            else:
-                print("Not a valid answer. Please enter Y or N.")
-    else:
-        sp.playlist_add_items(target['id'], selected_song_id)
-        print(f"{len(selected_song_id)} song(s) successfully copied.")
-        
-
-
-
-
-# CLI Execution for testing purposes:
-
-# source = select_source_playlist()
-# tracks = source_playlist_tracks(source)
-# selected = select_songs(tracks)
-# target = select_target_playlist(source['id'])
-# transfer_songs(selected, source['id'], target)
-
-
-
-
-
 
 
 

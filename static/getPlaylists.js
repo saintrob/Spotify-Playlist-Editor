@@ -4,7 +4,7 @@
 async function GetPlaylist() {
     try {
         const select = document.getElementById("allPlaylists");
-        const response = await fetch('http://127.0.0.1:8000/api/getallplaylists');
+        const response = await fetch('/api/getallplaylists');
         if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
         }

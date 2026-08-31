@@ -4,13 +4,18 @@
 async function listTargetPlaylists() {
     try {
         const select = document.getElementById("allTargetPlaylists");
-        const response = await fetch('http://127.0.0.1:8000/api/getallplaylists');
+        const sourceId = document.getElementById("allPlaylists").value;
+ 
+        const response = await fetch('/api/getallplaylists');
         if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const PlaylistData = await response.json();
-        
+        select.length = 1;
+ 
         for (let i = 0; i < PlaylistData.length; i++) {
+            if (PlaylistData[i]["id"] === sourceId) continue;
+ 
             const opt = document.createElement("option");
             opt.value = PlaylistData[i]["id"]
             opt.textContent = PlaylistData[i]["name"] 
@@ -21,5 +26,8 @@ async function listTargetPlaylists() {
         console.error("Failed to fetch data:", error);
     }
 }
-
+ 
 listTargetPlaylists();
+ 
+document.getElementById("allPlaylists")
+        .addEventListener("change", listTargetPlaylists);

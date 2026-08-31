@@ -6,7 +6,7 @@ async function sourcePlaylist_tracks() {
         button.addEventListener('click', async() => {
             try {
         const container = document.getElementById('radio-select-song-source');
-        const response = await fetch('http://127.0.0.1:8000/api/getsourceid/alltracks');
+        const response = await fetch('/api/getsourceid/alltracks');
         if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
         }

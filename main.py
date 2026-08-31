@@ -100,25 +100,6 @@ async def getSourceId_javascript(data: SourcePlaylistData):
             tracks = None
             return all_tracks
     
-    
-@app.get("/api/source_alltracks")
-# Get all of the tracks/items of the source playlist selected by the user
-async def source_playlist_tracks(data: SourcePlaylistData):
-    source_id = data.source_playlist_id
-    song_count = 0
-    all_tracks = []
-    tracks = sp.playlist_items(source_id)
-    while tracks:
-        if tracks['items'] == []:
-            return []
-        for track in tracks['items']:
-            all_tracks.append(track)
-            song_count += 1
-        if tracks['next']:
-            tracks = sp.next(tracks)
-        else:
-            tracks = None
-            return all_tracks
         
 @app.post("/api/transfersongs")
 async def transfer_songs(data: TargetPlaylistData):

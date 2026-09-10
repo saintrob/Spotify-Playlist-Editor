@@ -12,7 +12,7 @@ async function listTargetPlaylists() {
         }
         const PlaylistData = await response.json();
         select.length = 1;
- 
+        
         for (let i = 0; i < PlaylistData.length; i++) {
             if (PlaylistData[i]["id"] === sourceId) continue;
  
